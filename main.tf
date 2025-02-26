@@ -21,8 +21,6 @@ resource "azurerm_cognitive_account" "openai" {
   }
 }
 
-resource "time_static" "deployment_time" {}
-
 resource "azurerm_role_assignment" "cognitive_crypto_access" {
   count = var.encryption_key_id != null ? 1 : 0
 

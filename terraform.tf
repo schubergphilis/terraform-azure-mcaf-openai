@@ -9,10 +9,6 @@ terraform {
       source  = "Azure/azapi"
       version = "~> 2.2"
     }
-    time = {
-      source  = "hashicorp/time"
-      version = ">=0.8.0"
-    }
   }
 
   required_version = ">= 1.10.5"
