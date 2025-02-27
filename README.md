@@ -125,3 +125,69 @@ resource "azurerm_private_endpoint" "custom_openai_endpoint" {
 
 This module is licensed under the MIT License. See the LICENSE file for more details.
 
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10.5 |
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | ~> 2.2 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.16 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 2.2 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.16 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azapi_resource.content_filters](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) | resource |
+| [azurerm_cognitive_account.openai](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cognitive_account) | resource |
+| [azurerm_cognitive_account_customer_managed_key.oai_cmk](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cognitive_account_customer_managed_key) | resource |
+| [azurerm_cognitive_deployment.models](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cognitive_deployment) | resource |
+| [azurerm_monitor_diagnostic_setting.openaidiag](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
+| [azurerm_private_dns_zone.openaidns](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.vnetopenaidnslink](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_endpoint.openaipep](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
+| [azurerm_role_assignment.cognitive_crypto_access](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_location"></a> [location](#input\_location) | The location for the Azure OpenAI resources. | `string` | n/a | yes |
+| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The ID of the Log Analytics workspace for diagnostics. | `string` | n/a | yes |
+| <a name="input_models"></a> [models](#input\_models) | A map of Azure OpenAI models to be deployed. | <pre>map(object({<br/>    enable_dynamic_throttling = bool<br/>    model = object({<br/>      name    = string<br/>      version = string<br/>      format  = string<br/>    })<br/>    scale = object({<br/>      type     = string<br/>      capacity = number<br/>    })<br/>  }))</pre> | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | A unique name for the Azure OpenAI resources. | `string` | n/a | yes |
+| <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location for the resource group. | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group. | `string` | n/a | yes |
+| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | The ID of the subnet where the private endpoint will be deployed. | `string` | n/a | yes |
+| <a name="input_virtual_network_id"></a> [virtual\_network\_id](#input\_virtual\_network\_id) | The ID of the virtual network where the private endpoint will be deployed. | `string` | n/a | yes |
+| <a name="input_allowed_fqdns"></a> [allowed\_fqdns](#input\_allowed\_fqdns) | A list of allowed FQDNs for the Azure OpenAI resource. | `list(string)` | <pre>[<br/>  "openai.azure.com"<br/>]</pre> | no |
+| <a name="input_content_filters"></a> [content\_filters](#input\_content\_filters) | List of content filters for the OpenAI content policy | `list(map(any))` | <pre>[<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Violence",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Violence",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Hate",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Hate",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Sexual",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Sexual",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Selfharm",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Selfharm",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Jailbreak",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Jailbreak",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Indirect Attack",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Indirect Attack",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Text",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Text",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Code",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": false,<br/>    "enabled": true,<br/>    "name": "Protected Material Code",<br/>    "source": "Completion"<br/>  }<br/>]</pre> | no |
+| <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Whether to create a private endpoint and associated networking resources. Set to false if managing private endpoints outside the module. | `bool` | `true` | no |
+| <a name="input_enable_public_access"></a> [enable\_public\_access](#input\_enable\_public\_access) | Boolean flag to enable or disable public network access. | `bool` | `false` | no |
+| <a name="input_encryption_key_id"></a> [encryption\_key\_id](#input\_encryption\_key\_id) | Optional key vault key ID to use for encryption. If not provided, the module will create a CMK and store it in the provided key vault. | `string` | `null` | no |
+| <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address) | Optional static IP for the private endpoint. If null, a dynamic IP is assigned. | `string` | `null` | no |
+| <a name="input_sku"></a> [sku](#input\_sku) | The SKU for the Azure OpenAI resource. | `string` | `"S0"` | no |
+| <a name="input_trusted_ips"></a> [trusted\_ips](#input\_trusted\_ips) | A list of trusted IP addresses for network access. | `list(string)` | `[]` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_cognitive_account_endpoint"></a> [cognitive\_account\_endpoint](#output\_cognitive\_account\_endpoint) | The endpoint of the Azure OpenAI cognitive account. |
+| <a name="output_cognitive_account_id"></a> [cognitive\_account\_id](#output\_cognitive\_account\_id) | ID of the OpenAI cognitive account. |
+| <a name="output_cognitive_account_name"></a> [cognitive\_account\_name](#output\_cognitive\_account\_name) | Name of the OpenAI cognitive account. |
+| <a name="output_private_dns_zone_id"></a> [private\_dns\_zone\_id](#output\_private\_dns\_zone\_id) | The ID of the private DNS zone (null if create\_private\_endpoint is false). |
+| <a name="output_private_endpoint_id"></a> [private\_endpoint\_id](#output\_private\_endpoint\_id) | The ID of the private endpoint (null if create\_private\_endpoint is false). |
+<!-- END_TF_DOCS -->
