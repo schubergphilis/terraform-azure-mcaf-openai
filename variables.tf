@@ -116,5 +116,11 @@ variable "content_filters" {
 variable "create_private_endpoint" {
   description = "Optional boolean flag to control whether this module creates a private endpoint. Set to false if you're managing private endpoints outside of this module."
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "enable_diagnostics" {
+  type        = bool
+  default     = false
+  description = "Whether to enable diagnostic settings for the Azure OpenAI service"
 }

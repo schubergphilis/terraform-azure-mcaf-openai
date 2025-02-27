@@ -85,6 +85,7 @@ locals {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "openaidiag" {
+  count                      = var.enable_diagnostics ? 1 : 0
   name                       = "diagnostics"
   target_resource_id         = azurerm_cognitive_account.openai.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
