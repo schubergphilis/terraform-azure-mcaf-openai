@@ -108,8 +108,8 @@ This module is licensed under the MIT License. See the LICENSE file for more det
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 2.2 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.16 |
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | 2.2.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.20.0 |
 
 ## Modules
 
@@ -128,28 +128,36 @@ No modules.
 | [azurerm_private_dns_zone_virtual_network_link.vnetopenaidnslink](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_endpoint.openaipep](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 | [azurerm_role_assignment.cognitive_crypto_access](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_key_vault.kv](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
+| [azurerm_key_vault_key.encryption_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_key) | data source |
+| [azurerm_subnet.openai_subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
+| [azurerm_virtual_network.openai_vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/virtual_network) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_location"></a> [location](#input\_location) | The location for the Azure OpenAI resources. | `string` | n/a | yes |
-| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The ID of the Log Analytics workspace for diagnostics. | `string` | n/a | yes |
-| <a name="input_models"></a> [models](#input\_models) | A map of Azure OpenAI models to be deployed. Each model should specify dynamic throttling, model information, and scale settings. | <pre>map(object({<br/>    enable_dynamic_throttling = bool<br/>    model = object({<br/>      name    = string<br/>      version = string<br/>      format  = string<br/>    })<br/>    scale = object({<br/>      type     = string<br/>      capacity = number<br/>    })<br/>  }))</pre> | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | A prefix to be appended to resource names for uniqueness. | `string` | n/a | yes |
-| <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location for the resource group. This can be different from the Azure OpenAI location. | `string` | n/a | yes |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group. | `string` | n/a | yes |
-| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | The ID of the subnet where the private endpoint will be deployed. Only required when `create_private_endpoint` is true. | `string` | n/a | yes |
-| <a name="input_virtual_network_id"></a> [virtual\_network\_id](#input\_virtual\_network\_id) | The ID of the virtual network where the private endpoint will be deployed. Only required when `create_private_endpoint` is true. | `string` | n/a | yes |
 | <a name="input_allowed_fqdns"></a> [allowed\_fqdns](#input\_allowed\_fqdns) | A list of allowed FQDNs for the Azure OpenAI resource. | `list(string)` | <pre>[<br/>  "openai.azure.com"<br/>]</pre> | no |
 | <a name="input_content_filters"></a> [content\_filters](#input\_content\_filters) | Optional list of content filters for the OpenAI content policy. If not set, defaults to a pre-defined list. | `list(map(any))` | <pre>[<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Violence",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Violence",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Hate",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Hate",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Sexual",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Sexual",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Selfharm",<br/>    "severityThreshold": "High",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Selfharm",<br/>    "severityThreshold": "High",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Jailbreak",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Jailbreak",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Indirect Attack",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Indirect Attack",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Text",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Text",<br/>    "source": "Completion"<br/>  },<br/>  {<br/>    "blocking": true,<br/>    "enabled": true,<br/>    "name": "Protected Material Code",<br/>    "source": "Prompt"<br/>  },<br/>  {<br/>    "blocking": false,<br/>    "enabled": true,<br/>    "name": "Protected Material Code",<br/>    "source": "Completion"<br/>  }<br/>]</pre> | no |
+| <a name="input_create_private_dns_zone"></a> [create\_private\_dns\_zone](#input\_create\_private\_dns\_zone) | Optional boolean flag to control whether this module creates the private DNS zone. Set to false if you're managing DNS zones outside of this module. | `bool` | `false` | no |
 | <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Optional boolean flag to control whether this module creates a private endpoint. Set to false if you're managing private endpoints outside of this module. | `bool` | `false` | no |
 | <a name="input_enable_diagnostics"></a> [enable\_diagnostics](#input\_enable\_diagnostics) | Whether to enable diagnostic settings for the Azure OpenAI service | `bool` | `false` | no |
 | <a name="input_enable_public_access"></a> [enable\_public\_access](#input\_enable\_public\_access) | Optional boolean flag to enable or disable public network access. | `bool` | `false` | no |
-| <a name="input_encryption_key_id"></a> [encryption\_key\_id](#input\_encryption\_key\_id) | Optional key vault key ID to use for encryption. If not provided, the module will use a managed encryption key. | `string` | `null` | no |
+| <a name="input_encryption_key_name"></a> [encryption\_key\_name](#input\_encryption\_key\_name) | Name of the encryption key in the key vault. If not provided, an Azure managed key will be used. | `string` | `null` | no |
+| <a name="input_existing_private_dns_zone_id"></a> [existing\_private\_dns\_zone\_id](#input\_existing\_private\_dns\_zone\_id) | ID of an existing private DNS zone to use. Required when create\_private\_dns\_zone is false and create\_private\_endpoint is true. | `string` | `null` | no |
+| <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name) | Name of the key vault containing the encryption key. Only required when encryption\_key\_name is not provided. | `string` | `null` | no |
+| <a name="input_key_vault_resource_group_name"></a> [key\_vault\_resource\_group\_name](#input\_key\_vault\_resource\_group\_name) | Resource group name of the key vault. If not provided, resource\_group\_name will be used. Only required when encryption\_key\_name is provided. | `string` | `null` | no |
+| <a name="input_location"></a> [location](#input\_location) | The location for the Azure OpenAI resources. | `string` | n/a | yes |
+| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The ID of the Log Analytics workspace for diagnostics. Required when enable\_diagnostics is true. | `string` | n/a | yes |
+| <a name="input_models"></a> [models](#input\_models) | A map of Azure OpenAI models to be deployed. Each model should specify dynamic throttling, model information, and scale settings. | <pre>map(object({<br/>    enable_dynamic_throttling = bool<br/>    model = object({<br/>      name    = string<br/>      version = string<br/>      format  = string<br/>    })<br/>    scale = object({<br/>      type     = string<br/>      capacity = number<br/>    })<br/>  }))</pre> | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | A prefix to be appended to resource names for uniqueness. | `string` | n/a | yes |
+| <a name="input_openai_location"></a> [openai\_location](#input\_openai\_location) | Optional Azure location where the OpenAI models should be deployed in different location than the RG. (NOTE: Will be deprecated in future versions) | `string` | `null` | no |
 | <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address) | Optional static IP for the private endpoint. Only used when `create_private_endpoint` is true. | `string` | `null` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group. | `string` | n/a | yes |
 | <a name="input_sku"></a> [sku](#input\_sku) | The SKU for the Azure OpenAI resource. | `string` | `"S0"` | no |
+| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | The name of the subnet where the private endpoint will be deployed. Only required when create\_private\_endpoint is true and subnet\_id is not provided. | `string` | `null` | no |
 | <a name="input_trusted_ips"></a> [trusted\_ips](#input\_trusted\_ips) | Optional list of trusted IP addresses for network access. Only needed when `enable_public_access` is set to `true`. | `list(string)` | `[]` | no |
+| <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | The name of the virtual network where the private endpoint will be deployed. Required when create\_private\_endpoint is true. | `string` | `null` | no |
 
 ## Outputs
 

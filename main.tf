@@ -5,7 +5,7 @@ resource "azurerm_cognitive_account" "openai" {
   fqdns                              = var.allowed_fqdns
   kind                               = "OpenAI"
   local_auth_enabled                 = false
-  location                           = var.location
+  location                           = local.openai_location
   outbound_network_access_restricted = true
   public_network_access_enabled      = var.enable_public_access
   resource_group_name                = var.resource_group_name
@@ -22,26 +22,26 @@ resource "azurerm_cognitive_account" "openai" {
 }
 
 resource "azurerm_role_assignment" "cognitive_crypto_access" {
-  count = var.encryption_key_id != null ? 1 : 0
+  count = local.encryption_key_id != null ? 1 : 0
 
-  scope                = var.encryption_key_id
+  scope                = local.encryption_key_id
   role_definition_name = "Key Vault Crypto User"
   principal_id         = azurerm_cognitive_account.openai.identity[0].principal_id
 }
 
 resource "azurerm_cognitive_account_customer_managed_key" "oai_cmk" {
-  count = var.encryption_key_id != null ? 1 : 0
+  count = local.encryption_key_id != null ? 1 : 0
 
   cognitive_account_id = azurerm_cognitive_account.openai.id
-  key_vault_key_id     = var.encryption_key_id
+  key_vault_key_id     = local.encryption_key_id
 }
 
 resource "azurerm_private_endpoint" "openaipep" {
   count               = var.create_private_endpoint ? 1 : 0
   name                = "${var.name}-pep"
-  location            = var.resource_group_location
+  location            = var.location
   resource_group_name = var.resource_group_name
-  subnet_id           = var.subnet_id
+  subnet_id           = local.subnet_id
 
   dynamic "ip_configuration" {
     for_each = var.private_ip_address != null ? [1] : []
@@ -60,24 +60,31 @@ resource "azurerm_private_endpoint" "openaipep" {
     subresource_names              = ["account"]
   }
 
-  private_dns_zone_group {
-    name                 = azurerm_private_dns_zone.openaidns[0].name
-    private_dns_zone_ids = [azurerm_private_dns_zone.openaidns[0].id]
+  dynamic "private_dns_zone_group" {
+    for_each = var.create_private_endpoint ? [1] : []
+    content {
+      name = "default"
+      private_dns_zone_ids = var.create_private_dns_zone ? [
+        azurerm_private_dns_zone.openaidns[0].id
+        ] : [
+        var.existing_private_dns_zone_id
+      ]
+    }
   }
 }
 
 resource "azurerm_private_dns_zone" "openaidns" {
-  count               = var.create_private_endpoint ? 1 : 0
+  count               = var.create_private_dns_zone ? 1 : 0
   name                = "privatelink.openai.azure.com"
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "vnetopenaidnslink" {
-  count                 = var.create_private_endpoint ? 1 : 0
+  count                 = var.create_private_dns_zone ? 1 : 0
   name                  = "${var.name}-openaidnslink-vnet"
   private_dns_zone_name = azurerm_private_dns_zone.openaidns[0].name
   resource_group_name   = var.resource_group_name
-  virtual_network_id    = var.virtual_network_id
+  virtual_network_id    = local.vnet_id
 }
 
 locals {
