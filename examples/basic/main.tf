@@ -10,7 +10,7 @@ terraform {
 }
 
 module "azure_openai" {
-  source = "git::https://github.com/schubergphilis/terraform-azure-mcaf-openai.git?ref=0.0.1a"
+  source = "git::https://github.com/schubergphilis/terraform-azure-mcaf-openai.git?ref=release-1.0.0"
 
   name                       = "example"
   location                   = "swedencentral"
