@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS FILE DIRECTLY
+# Source: https://github.com/schubergphilis/mcaf-github-workflows
+
 name: "release-drafter"
 
 on:
@@ -7,6 +10,7 @@ on:
       - master
     paths-ignore:
       - .github/**
+      - .gitignore
       - .pre-commit-config.yaml
       - CHANGELOG.md
       - CONTRIBUTING.md
