@@ -132,6 +132,7 @@ variable "enable_diagnostics" {
 variable "log_analytics_workspace_id" {
   description = "The ID of the Log Analytics workspace for diagnostics. Required when enable_diagnostics is true."
   type        = string
+  default     = null
 }
 
 variable "encryption_key_name" {

@@ -14,7 +14,7 @@ To use this module there are a few prerequisites:
   - An existing subnet (its ID must be provided via the `subnet_id` variable).
   - Optional dedicated private IP address for the private endpoint (via the `private_ip_address` variable). If no static IP is specified, the module will assign a dynamic IP.
 - An encryption key is required. If you do not provide an external key via the `encryption_key_id` variable, the module will use an Azure managed encryption key.
-- A Log Analytics workspace (its ID must be provided via the `log_analytics_workspace_id` variable) for diagnostics.
+- A Log Analytics workspace (its ID must be provided via the `log_analytics_workspace_id` variable) for diagnostics if diagnostics is enabled.
 
 ## Examples
 
