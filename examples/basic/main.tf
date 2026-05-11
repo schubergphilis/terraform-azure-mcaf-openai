@@ -16,9 +16,6 @@ module "azure_openai" {
   location                   = "swedencentral"
   log_analytics_workspace_id = "your-log-analytics-workspace-id"
   resource_group_name        = "your-resource-group"
-  resource_group_location    = "your-resource-group-location"
-  subnet_id                  = "your-subnet-id"
-  virtual_network_id         = "your-virtual-network-id"
   models = {
     gpt-4o-mini = {
       version_upgrade_option    = "NoAutoUpgrade"
