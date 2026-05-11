@@ -43,6 +43,18 @@ resource "azurerm_private_endpoint" "openaipep" {
   resource_group_name = var.resource_group_name
   subnet_id           = local.subnet_id
 
+  lifecycle {
+    precondition {
+      condition     = var.subnet_name != null && var.vnet_name != null
+      error_message = "Both subnet_name and vnet_name must be provided when create_private_endpoint is true."
+    }
+
+    precondition {
+      condition     = var.create_private_dns_zone || var.existing_private_dns_zone_id != null
+      error_message = "When create_private_endpoint is true and create_private_dns_zone is false, existing_private_dns_zone_id must be provided."
+    }
+  }
+
   dynamic "ip_configuration" {
     for_each = var.private_ip_address != null ? [1] : []
     content {
@@ -80,7 +92,7 @@ resource "azurerm_private_dns_zone" "openaidns" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "vnetopenaidnslink" {
-  count                 = var.create_private_dns_zone ? 1 : 0
+  count                 = var.create_private_dns_zone && var.create_private_endpoint ? 1 : 0
   name                  = "${var.name}-openaidnslink-vnet"
   private_dns_zone_name = azurerm_private_dns_zone.openaidns[0].name
   resource_group_name   = var.resource_group_name
@@ -106,6 +118,11 @@ resource "azurerm_monitor_diagnostic_setting" "openaidiag" {
   }
 
   lifecycle {
+    precondition {
+      condition     = var.log_analytics_workspace_id != null
+      error_message = "log_analytics_workspace_id must be provided when enable_diagnostics is true."
+    }
+
     ignore_changes = [
       metric
     ]

@@ -19,6 +19,6 @@ output "private_endpoint_id" {
 }
 
 output "private_dns_zone_id" {
-  description = "The ID of the private DNS zone (null if create_private_endpoint is false)."
-  value       = var.create_private_endpoint ? azurerm_private_dns_zone.openaidns[0].id : null
+  description = "The ID of the private DNS zone (null if create_private_dns_zone is false)."
+  value       = var.create_private_dns_zone ? azurerm_private_dns_zone.openaidns[0].id : null
 }

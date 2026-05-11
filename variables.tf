@@ -94,7 +94,7 @@ variable "create_private_endpoint" {
 }
 
 variable "subnet_name" {
-  description = "The name of the subnet where the private endpoint will be deployed. Only required when create_private_endpoint is true and subnet_id is not provided."
+  description = "The name of the subnet where the private endpoint will be deployed. Required when create_private_endpoint is true."
   type        = string
   default     = null
 }
@@ -132,6 +132,7 @@ variable "enable_diagnostics" {
 variable "log_analytics_workspace_id" {
   description = "The ID of the Log Analytics workspace for diagnostics. Required when enable_diagnostics is true."
   type        = string
+  default     = null
 }
 
 variable "encryption_key_name" {
@@ -141,7 +142,7 @@ variable "encryption_key_name" {
 }
 
 variable "key_vault_name" {
-  description = "Name of the key vault containing the encryption key. Only required when encryption_key_name is not provided."
+  description = "Name of the key vault containing the encryption key. Required when encryption_key_name is provided."
   type        = string
   default     = null
 }

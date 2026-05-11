@@ -10,11 +10,12 @@ To use this module there are a few prerequisites:
 - Appropriate permissions to deploy and manage Azure resources such as Cognitive Accounts, Key Vaults, Private Endpoints, and DNS Zones.
 - An existing resource group (its name must be provided via the `resource_group_name` variable).
 - If creating a private endpoint (`create_private_endpoint = true`):
-  - An existing virtual network (its ID must be provided via the `virtual_network_id` variable).
-  - An existing subnet (its ID must be provided via the `subnet_id` variable).
+  - An existing virtual network (its name must be provided via the `vnet_name` variable).
+  - An existing subnet (its name must be provided via the `subnet_name` variable).
   - Optional dedicated private IP address for the private endpoint (via the `private_ip_address` variable). If no static IP is specified, the module will assign a dynamic IP.
-- An encryption key is required. If you do not provide an external key via the `encryption_key_id` variable, the module will use an Azure managed encryption key.
-- A Log Analytics workspace (its ID must be provided via the `log_analytics_workspace_id` variable) for diagnostics.
+  - Either set `create_private_dns_zone = true` to create a new DNS zone, or provide an existing one via `existing_private_dns_zone_id`.
+- Encryption uses an Azure managed key by default. To use a customer-managed key, provide both `key_vault_name` and `encryption_key_name`.
+- If enabling diagnostics (`enable_diagnostics = true`), a Log Analytics workspace ID must be provided via the `log_analytics_workspace_id` variable.
 
 ## Examples
 
@@ -22,32 +23,32 @@ To use this module there are a few prerequisites:
 
 ```hcl
 module "azure_openai" {
-  source                    = "./terraform-azure-mcaf-azureopenai"
+  source = "../.."
 
-  name                      = "example"
-  location                  = "swedencentral"
-  log_analytics_workspace_id= "your-log-analytics-workspace-id"
-  resource_group_name       = "your-resource-group"
-  resource_group_location   = "your-resource-group-location"
-  subnet_id                 = "your-subnet-id"
-  virtual_network_id        = "your-virtual-network-id"
+  name                    = "example"
+  location                = "swedencentral"
+  resource_group_name     = "your-resource-group"
+  create_private_endpoint = true
+  create_private_dns_zone = true
+  vnet_name               = "your-vnet-name"
+  subnet_name             = "your-subnet-name"
+
   models = {
-        gpt-4o-mini = {
-            version_upgrade_option    = "NoAutoUpgrade"
-            enable_dynamic_throttling = true
+    gpt-4o-mini = {
+      enable_dynamic_throttling = true
 
-            model = {
-                format  = "OpenAI"
-                name    = "gpt-4o-mini"
-                version = "2024-07-18"
-            }
+      model = {
+        format  = "OpenAI"
+        name    = "gpt-4o-mini"
+        version = "2024-07-18"
+      }
 
-            scale = {
-                type     = "Standard"
-                capacity = 5
-            }
-        },
+      scale = {
+        type     = "Standard"
+        capacity = 5
+      }
     }
+  }
   // Optionally override the default content filters
   // content_filters = [...]
 }
@@ -57,16 +58,14 @@ module "azure_openai" {
 
 ```hcl
 module "azure_openai" {
-  source                    = "./terraform-azure-mcaf-azureopenai"
+  source = "../.."
 
-  name                      = "example"
-  location                  = "swedencentral"
-  log_analytics_workspace_id= "your-log-analytics-workspace-id"
-  resource_group_name       = "your-resource-group"
-  resource_group_location   = "your-resource-group-location"
+  name                = "example"
+  location            = "swedencentral"
+  resource_group_name = "your-resource-group"
 
   // Disable private endpoint creation in this module
-  create_private_endpoint   = false
+  create_private_endpoint = false
 
   models = {
     // Model definitions as above

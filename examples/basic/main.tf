@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.7"
+  required_version = ">= 1.10.5"
 
   required_providers {
     azurerm = {
@@ -10,15 +10,13 @@ terraform {
 }
 
 module "azure_openai" {
-  source = "git::https://github.com/schubergphilis/terraform-azure-mcaf-openai.git?ref=release-1.0.0"
+  source = "../.."
 
-  name                       = "example"
-  location                   = "swedencentral"
-  log_analytics_workspace_id = "your-log-analytics-workspace-id"
-  resource_group_name        = "your-resource-group"
+  name                = "example"
+  location            = "swedencentral"
+  resource_group_name = "your-resource-group"
   models = {
     gpt-4o-mini = {
-      version_upgrade_option    = "NoAutoUpgrade"
       enable_dynamic_throttling = true
 
       model = {
