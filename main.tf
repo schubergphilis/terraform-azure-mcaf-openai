@@ -41,6 +41,8 @@ resource "azurerm_cognitive_account_customer_managed_key" "oai_cmk" {
 
   cognitive_account_id = azurerm_cognitive_account.openai.id
   key_vault_key_id     = local.encryption_key_id
+
+  depends_on = [azurerm_role_assignment.cognitive_crypto_access]
 }
 
 resource "azurerm_private_endpoint" "openaipep" {
