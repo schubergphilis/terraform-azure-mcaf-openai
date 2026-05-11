@@ -137,7 +137,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_location"></a> [location](#input\_location) | The location for the Azure OpenAI resources. | `string` | n/a | yes |
-| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The ID of the Log Analytics workspace for diagnostics. Required when enable\_diagnostics is true. | `string` | n/a | yes |
 | <a name="input_models"></a> [models](#input\_models) | A map of Azure OpenAI models to be deployed. Each model should specify dynamic throttling, model information, and scale settings. | <pre>map(object({<br/>    enable_dynamic_throttling = bool<br/>    model = object({<br/>      name    = string<br/>      version = string<br/>      format  = string<br/>    })<br/>    scale = object({<br/>      type     = string<br/>      capacity = number<br/>    })<br/>  }))</pre> | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | A prefix to be appended to resource names for uniqueness. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group. | `string` | n/a | yes |
@@ -149,12 +148,13 @@ No modules.
 | <a name="input_enable_public_access"></a> [enable\_public\_access](#input\_enable\_public\_access) | Optional boolean flag to enable or disable public network access. | `bool` | `false` | no |
 | <a name="input_encryption_key_name"></a> [encryption\_key\_name](#input\_encryption\_key\_name) | Name of the encryption key in the key vault. If not provided, an Azure managed key will be used. | `string` | `null` | no |
 | <a name="input_existing_private_dns_zone_id"></a> [existing\_private\_dns\_zone\_id](#input\_existing\_private\_dns\_zone\_id) | ID of an existing private DNS zone to use. Required when create\_private\_dns\_zone is false and create\_private\_endpoint is true. | `string` | `null` | no |
-| <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name) | Name of the key vault containing the encryption key. Only required when encryption\_key\_name is not provided. | `string` | `null` | no |
+| <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name) | Name of the key vault containing the encryption key. Required when encryption\_key\_name is provided. | `string` | `null` | no |
 | <a name="input_key_vault_resource_group_name"></a> [key\_vault\_resource\_group\_name](#input\_key\_vault\_resource\_group\_name) | Resource group name of the key vault. If not provided, resource\_group\_name will be used. Only required when encryption\_key\_name is provided. | `string` | `null` | no |
+| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The ID of the Log Analytics workspace for diagnostics. Required when enable\_diagnostics is true. | `string` | `null` | no |
 | <a name="input_openai_location"></a> [openai\_location](#input\_openai\_location) | Optional Azure location where the OpenAI models should be deployed in different location than the RG. (NOTE: Will be deprecated in future versions) | `string` | `null` | no |
 | <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address) | Optional static IP for the private endpoint. Only used when `create_private_endpoint` is true. | `string` | `null` | no |
 | <a name="input_sku"></a> [sku](#input\_sku) | The SKU for the Azure OpenAI resource. | `string` | `"S0"` | no |
-| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | The name of the subnet where the private endpoint will be deployed. Only required when create\_private\_endpoint is true and subnet\_id is not provided. | `string` | `null` | no |
+| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | The name of the subnet where the private endpoint will be deployed. Required when create\_private\_endpoint is true. | `string` | `null` | no |
 | <a name="input_trusted_ips"></a> [trusted\_ips](#input\_trusted\_ips) | Optional list of trusted IP addresses for network access. Only needed when `enable_public_access` is set to `true`. | `list(string)` | `[]` | no |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | The name of the virtual network where the private endpoint will be deployed. Required when create\_private\_endpoint is true. | `string` | `null` | no |
 
@@ -165,6 +165,6 @@ No modules.
 | <a name="output_cognitive_account_endpoint"></a> [cognitive\_account\_endpoint](#output\_cognitive\_account\_endpoint) | The endpoint of the Azure OpenAI cognitive account. |
 | <a name="output_cognitive_account_id"></a> [cognitive\_account\_id](#output\_cognitive\_account\_id) | ID of the OpenAI cognitive account. |
 | <a name="output_cognitive_account_name"></a> [cognitive\_account\_name](#output\_cognitive\_account\_name) | Name of the OpenAI cognitive account. |
-| <a name="output_private_dns_zone_id"></a> [private\_dns\_zone\_id](#output\_private\_dns\_zone\_id) | The ID of the private DNS zone (null if create\_private\_endpoint is false). |
+| <a name="output_private_dns_zone_id"></a> [private\_dns\_zone\_id](#output\_private\_dns\_zone\_id) | The ID of the private DNS zone (null if create\_private\_dns\_zone is false). |
 | <a name="output_private_endpoint_id"></a> [private\_endpoint\_id](#output\_private\_endpoint\_id) | The ID of the private endpoint (null if create\_private\_endpoint is false). |
 <!-- END_TF_DOCS -->
