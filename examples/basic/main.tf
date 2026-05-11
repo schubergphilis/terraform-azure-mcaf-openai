@@ -9,6 +9,10 @@ terraform {
   }
 }
 
+provider "azurerm" {
+  features {}
+}
+
 module "azure_openai" {
   source = "../.."
 

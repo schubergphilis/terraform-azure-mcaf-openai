@@ -19,6 +19,13 @@ resource "azurerm_cognitive_account" "openai" {
     default_action = "Deny"
     ip_rules       = var.enable_public_access ? var.trusted_ips : []
   }
+
+  lifecycle {
+    precondition {
+      condition     = (var.key_vault_name != null) == (var.encryption_key_name != null)
+      error_message = "Both key_vault_name and encryption_key_name must be provided together for customer-managed key encryption."
+    }
+  }
 }
 
 resource "azurerm_role_assignment" "cognitive_crypto_access" {

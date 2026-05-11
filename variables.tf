@@ -4,7 +4,7 @@ variable "location" {
 }
 
 variable "name" {
-  description = "A prefix to be appended to resource names for uniqueness."
+  description = "The name for the Azure OpenAI Cognitive Account and related resources."
   type        = string
 }
 

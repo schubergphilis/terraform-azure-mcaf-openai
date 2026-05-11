@@ -1,6 +1,6 @@
 # Terraform Azure MCAF OpenAI Module
 
-This module streamlines the deployment of Azure OpenAI resources using Terraform. It provisions essential infrastructure components—including an Azure Cognitive Services account configured for OpenAI, private endpoints with secure network integration, encryption(by default will use Azure managed encryption key and optional customer-managed encryption key), and diagnostic monitoring via a Log Analytics workspace—ensuring a secure, scalable, and production-ready environment.
+This module streamlines the deployment of Azure OpenAI resources using Terraform. It provisions essential infrastructure components—including an Azure Cognitive Services account configured for OpenAI, private endpoints with secure network integration, encryption (using Azure managed keys by default, with optional customer-managed key support), and diagnostic monitoring via a Log Analytics workspace—ensuring a secure, scalable, and production-ready environment.
 
 ## Usage
 
