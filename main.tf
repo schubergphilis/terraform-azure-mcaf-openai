@@ -79,16 +79,13 @@ resource "azurerm_private_endpoint" "openaipep" {
     subresource_names              = ["account"]
   }
 
-  dynamic "private_dns_zone_group" {
-    for_each = var.create_private_endpoint ? [1] : []
-    content {
-      name = "default"
-      private_dns_zone_ids = var.create_private_dns_zone ? [
-        azurerm_private_dns_zone.openaidns[0].id
-        ] : [
-        var.existing_private_dns_zone_id
-      ]
-    }
+  private_dns_zone_group {
+    name = "default"
+    private_dns_zone_ids = var.create_private_dns_zone ? [
+      azurerm_private_dns_zone.openaidns[0].id
+      ] : [
+      var.existing_private_dns_zone_id
+    ]
   }
 }
 
@@ -104,6 +101,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnetopenaidnslink" {
   private_dns_zone_name = azurerm_private_dns_zone.openaidns[0].name
   resource_group_name   = var.resource_group_name
   virtual_network_id    = local.vnet_id
+
+  lifecycle {
+    precondition {
+      condition     = var.vnet_name != null
+      error_message = "vnet_name must be provided when create_private_dns_zone and create_private_endpoint are true."
+    }
+  }
 }
 
 locals {
